@@ -9,7 +9,7 @@ def MD5(x):
     m.update(b)
     str_md5 = m.hexdigest()
     return str_md5
-with open('busdata.csv')as t:
+with open('busdata.csv',encoding='utf-8')as t:
         t_csv = csv.reader(t)
         for row in t_csv:
             bnumber=row[0]
