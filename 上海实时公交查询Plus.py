@@ -57,7 +57,7 @@ try:
             #print(busnumber,"\n","距离本站：",stopdis,"站，",distance,"m\n","预计",time,"s后到达本站\n")
             if int(stopdis)==1:
                 present.append(id)
-                detail[id]=busnumber
+                detail[id]=[busnumber,distance]
         j=j+1
         
     try:
@@ -65,8 +65,9 @@ try:
         i=1
         for it in stoplist:
             if i in present:
-                number=detail[i]
-                print(str(i),".",stoplist[i-1],"  🚌↓ ",number)
+                number=detail[i][0]
+                distance=detail[i][1]
+                print(str(i),".",stoplist[i-1],"  🚌↓  " ,number ,"距离下站：",distance,"m")
             else:
                 print(str(i),".",stoplist[i-1])
             i=i+1
