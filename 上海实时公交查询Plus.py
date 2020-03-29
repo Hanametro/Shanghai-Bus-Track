@@ -11,7 +11,12 @@ def MD5(x):
     str_md5 = m.hexdigest()
     return str_md5
 try:
-    bnumber=input("请输入公交线路（例：71路，北安线）：")
+    bnumber=input("请输入公交线路（例：71，北安线）：")
+    try:
+        x=int(bnumber)
+        bnumber=str(x)+"路"
+    except:
+        pass
     bn=MD5(bnumber)
     stoplist=[]        
     
