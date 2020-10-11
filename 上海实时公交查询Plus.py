@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
-import urllib
 from bs4 import BeautifulSoup
+
 def MD5(x):
     import hashlib
     
@@ -12,27 +12,27 @@ def MD5(x):
     return str_md5
 try:
     bnumber=input("请输入公交线路（例：71，北安线）：")
-    try:
+    if bnumber.isdigit()==True:
         x=int(bnumber)
         bnumber=str(x)+"路"
-    except:
+    else:
         pass
     bn=MD5(bnumber)
     stoplist=[]        
     
     url1="https://shanghaicity.openservice.kankanews.com/public/bus/mes/sid/"+bn
-    r1 = requests.get(url1)
+    hd = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36'}
+    r1 = requests.get(url1,headers=hd)
     soup = BeautifulSoup(r1.text, 'html.parser')
     stop_list = soup.find_all('span', class_='name')
     for item in stop_list:       
         a=item.text
         stoplist.append(a)
-   
     dire=input("请输入上下行(0："+stoplist[-1]+" 方向； 1:"+stoplist[0]+" 方向)：")
     if dire=="1":
         stoplist=[]
         url2="https://shanghaicity.openservice.kankanews.com/public/bus/mes/sid/"+bn+"?stoptype=1"
-        r1 = requests.get(url2)
+        r1 = requests.get(url2,headers=hd)
         soup = BeautifulSoup(r1.text, 'html.parser')
         stop_list = soup.find_all('span', class_='name')
         for item in stop_list:       
@@ -45,14 +45,14 @@ try:
     for i in stoplist:          
         stopid=str(j)
         postdata={'stoptype':dire,'stopid':stopid,'sid':bn }
-        r=requests.post('https://shanghaicity.openservice.kankanews.com/public/bus/Getstop',data=postdata)
+        r=requests.post('https://shanghaicity.openservice.kankanews.com/public/bus/Getstop',data=postdata,headers=hd)
         result=r.text
         id=int(stopid)-1
-       # print("\n",bnumber," ",stoplist[id]," 车站 实时公交信息\n")
+        #print("\n",bnumber," ",stoplist[id]," 车站 实时公交信息\n")
         
         if result=='{"error":"-2"}':
-            #print("暂未发车\n")
-            pass
+           # print("暂未发车\n")
+            pass 
         else:
             rs=result.strip('[\'{').strip(']}\'').split(",")
             busnumber=((rs[1].strip('\'').strip('\"').split(":"))[1].strip('\"')).encode('utf-8').decode("unicode-escape")
@@ -64,7 +64,8 @@ try:
                 present.append(id)
                 detail[id]=[busnumber,distance]
         j=j+1
-        
+
+
     try:
         print("\n",bnumber," 开往：",stoplist[-1],"方向  \n 沿途站点：\n")
         i=1
@@ -76,7 +77,11 @@ try:
             else:
                 print(str(i),".",stoplist[i-1])
             i=i+1
+        
     except:
         pass
+    
+    
+
 except:
     exit()
