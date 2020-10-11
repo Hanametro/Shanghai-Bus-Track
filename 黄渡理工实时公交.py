@@ -20,7 +20,9 @@ with open('busdata.csv',encoding='utf-8')as t:
             bn=MD5(bnumber)
             
             postdata={'stoptype':dire,'stopid':stopid,'sid':bn }
-            r=requests.post('https://shanghaicity.openservice.kankanews.com/public/bus/Getstop',data=postdata)
+            hd = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36'}
+    
+            r=requests.post('https://shanghaicity.openservice.kankanews.com/public/bus/Getstop',data=postdata,headers=hd)
             result=r.text
             print(bnumber," ",stopname," 车站(",dest,"方向)")
             if result=='{"error":"-2"}':
